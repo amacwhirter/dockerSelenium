@@ -1,3 +1,5 @@
+version: "2"
+services:
   hub:
     image: selenium/hub
     ports:
@@ -14,9 +16,31 @@
       - HUB_PORT_4444_TCP_ADDR=hub
       - HUB_PORT_4444_TCP_PORT=4444
 
+  chrome-debug:
+    image: selenium/node-chrome-debug
+    container_name: chrome_node_debug
+    links:
+      - hub:hub
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=hub
+      - HUB_PORT_4444_TCP_PORT=4444
+
   firefox:
     image: selenium/node-firefox
     container_name: firefox_node
+    links:
+      - hub:hub
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=hub
+      - HUB_PORT_4444_TCP_PORT=4444
+
+  firefox-debug:
+    image: selenium/node-firefox-debug
+    container_name: firefox_node_debug
     links:
       - hub:hub
     volumes:
